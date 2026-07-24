@@ -1,0 +1,24 @@
+.import/
+*.import
+.godot/
+export_presets.cfg
+export_presets/*
+.export/
+.export_templates/
+.mono/
+*.mono
+
+# Visual Studio / VSCode
+.vs/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# C# build
+bin/
+obj/
+# Godot 4+ specific ignores
+.godot/
+/android/

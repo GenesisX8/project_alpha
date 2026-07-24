@@ -1,0 +1,63 @@
+Game Build Document
+--------------------------------------------------------------------
+Overview — Build Order
+Rules document — write the actual game rules in plain text before any code exists.
+Card data model — define a Card Resource and get a handful of real cards represented as data, not code.
+Game state & turn structure — a state machine for phases/turns, independent of any rendering.
+Zones & board model — deck, hand, discard, board, graveyard as data containers with clear transition rules.
+Effect/ability system — the hardest part of any TCG; an event-driven system for triggered/activated abilities.
+Minimal functional UI — plain buttons/labels wired to the state machine, used to validate rules end-to-end.
+Networking (only if multiplayer) — authoritative game state + RPC layer, added once single-player rules work.
+Content pipeline — a card editor or data-import workflow so you're not hand-authoring Resources forever.
+Real UI/UX and juice — art, drag-and-drop, animations, audio — last, once mechanics are locked.
+AI opponent (if single-player) — built against the same state machine as the UI, not against the UI itself.
+Everything below expands on why each step matters and Godot-specific notes for your project (which is flagged for Godot 4.7 with both GDScript and C#).
+
+1. Rules document
+Before touching Godot, write down: turn structure, win conditions, resource system (mana/energy), card types, zone transitions, and what a "stack" or priority system looks like (if any). TCGs live or die on interaction rules — what happens when two triggered abilities fire at once, what can be responded to, etc. If this is fuzzy, everything built on top of it will need rework. This is the single highest-leverage hour you can spend.
+
+2. Card data model
+Use a custom Resource (not a scene) for card definitions:
+
+
+class_name CardData
+extends Resource
+
+@export var id: StringName
+@export var display_name: String
+@export var cost: int
+@export var card_type: String # "creature", "spell", "resource", etc.
+@export var stats: Dictionary # attack/health/whatever your game needs
+@export var abilities: Array[AbilityData]
+Resources are serializable, editable in the Inspector, and easy to save as .tres files — this becomes your card database. Decide early: are abilities described by data (a small DSL/enum of effect types the engine interprets) or by code (each card is a script)? Data-driven is more work up front but scales far better once you have 100+ cards; code-per-card is faster initially but becomes unmaintainable past a couple dozen cards. Most shipped digital TCGs (Hearthstone, Slay the Spire) lean data-driven with a library of composable effect primitives.
+
+3. Game state & turn structure
+A GameController (the file you already created) or a dedicated GameState singleton should own a state machine: Draw → Main → Combat → End, with explicit transition functions. This state machine should be completely UI-agnostic — it should work if you drive it from unit tests, a headless CLI, or a real UI. That separation is what lets you test rules without touching a single button node.
+
+4. Zones & board model
+Model each zone (deck, hand, board, graveyard, exile) as a plain data container — an Array[CardData] or a small class wrapping one — with explicit move_card(card, from_zone, to_zone) operations that enforce legality. Resist the urge to let the UI directly mutate zone arrays; route everything through the game state so the UI is just a view of state, not a source of truth. This also makes multiplayer sync and undo/replay much easier later.
+
+5. Effect/ability system
+This is where most solo TCG projects stall. Recommended approach: an event bus (Signal-based in Godot) that broadcasts game events (card_played, creature_died, turn_started, etc.), and abilities subscribe to the events they care about. Keep effects as small composable actions (deal_damage, draw_card, buff_stat) rather than one giant switch statement per card — this is what lets you add new cards later by combining existing primitives instead of writing new bespoke logic each time.
+
+6. Minimal functional UI
+Wire up ugly buttons and labels that call into the game state machine. The goal is to play a full game against yourself with zero art. This validates the rules engine and surfaces design problems (a phase that's never reachable, an ability that soft-locks the game) while they're still cheap to fix.
+
+7. Networking (only if multiplayer)
+If this is multiplayer, decide now (not later) whether the server is authoritative over game state — it should be, to prevent cheating and desync. Godot's high-level multiplayer API (MultiplayerAPI, RPCs) works, but for a TCG you likely want the authoritative game state to live on one peer (host or dedicated server) and the state machine from step 3 becomes the thing that gets replicated/synced, not raw UI state.
+
+8. Content pipeline
+Hand-editing dozens of .tres Resource files in the Inspector doesn't scale. Consider a simple custom editor (Godot plugin/dock) or importing card data from a spreadsheet/JSON/Google Sheet into Resources via an @tool script. Do this once you have enough cards that manual editing is annoying — not before.
+
+9. Real UI/UX and polish
+Once mechanics are proven: card art, hand fanning/layout, drag-and-drop targeting, hover previews, animations for attacks/deaths, sound/juice. This is the most visible work and the most fun, which is exactly why it's tempting to start here — but it's cheapest to do last, against locked rules.
+
+10. AI opponent
+If you need single-player, write the AI against the GameState API from step 3, the same interface the UI uses. Simple heuristic/greedy AI is usually good enough for a first pass (evaluate a few candidate plays, pick the best-scoring one) — don't reach for anything fancier until basic rules-following AI is in place.
+
+What's easy to miss
+Randomness/shuffling determinism — decide early if you need seeded/replayable shuffles (useful for debugging and for any "seen this exact game" bug reports).
+Undo/replay logging — if your state mutations are centralized (step 3/4), logging every action for replay or debugging is nearly free. Bolting it on later is not.
+Mulligan/redraw rules, and the "empty deck" fatigue/loss condition — commonly forgotten edge cases in the rules doc.
+GDScript vs C# split — your project has both enabled. A common pattern is C# for the rules engine/state machine (better for complex logic, strong typing catches bugs in effect resolution) and GDScript for UI glue — but pick one for the engine and be consistent; don't split ability logic across both languages.
+Testing the rules engine in isolation — since it's UI-agnostic, you can write GUT (Godot Unit Test) or plain script-based tests that simulate full games without ever opening a scene. Worth setting up early, since TCG rule interactions are exactly the kind of thing that silently breaks when you add card #47.
