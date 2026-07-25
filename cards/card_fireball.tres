@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Card" format=3 uid="uid://de7vo0cl6hswe"]
+
+[ext_resource type="Script" uid="uid://swm7ld7vekxd" path="res://scripts/card.gd" id="1_ibgmb"]
+
+[resource]
+script = ExtResource("1_ibgmb")
+id = 1
+name = "Fireball"
+description = "Deal 3 damage to a target and apply burn."
+cost = 2
+damage = 2
+effects = Array[String](["burn"])
+effect_duration = 2
+rarity = "Common"
+metadata/_custom_type_script = "uid://swm7ld7vekxd"

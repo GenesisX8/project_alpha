@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Card" format=3 uid="uid://mtvelbh76uhs"]
+
+[ext_resource type="Script" uid="uid://swm7ld7vekxd" path="res://scripts/card.gd" id="1_ibgmb"]
+
+[resource]
+script = ExtResource("1_ibgmb")
+id = 1
+name = "Frostbolt"
+description = "Deal 3 damage to a target and apply frostbite."
+cost = 3
+damage = 3
+effects = Array[String](["frostbite"])
+effect_duration = 2
+rarity = "Common"
+metadata/_custom_type_script = "uid://swm7ld7vekxd"
