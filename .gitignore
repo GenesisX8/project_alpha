@@ -1,24 +1,32 @@
-.import/
-*.import
-.godot/
-export_presets.cfg
-export_presets/*
-.export/
-.export_templates/
-.mono/
-*.mono
-
-# Visual Studio / VSCode
-.vs/
-.vscode/
-
-# OS
-.DS_Store
-Thumbs.db
-
-# C# build
-bin/
-obj/
-# Godot 4+ specific ignores
+# Godot 4 editor cache / imported assets
 .godot/
 /android/
+
+# Export output
+.export/
+.export_templates/
+build/
+export_presets/*
+
+# NOTE: export_presets.cfg is deliberately NOT ignored.
+# It is your build configuration (platforms, output paths, feature flags) and is
+# worth version-controlling for this desktop-only project. Godot's default
+# template ignores it because Android keystore passwords land there — which does
+# not apply yet. If you ever add signing keys, a keystore password, or a script
+# encryption key to a preset, re-ignore this file or move the secrets into a
+# gitignored override before committing.
+
+# Mono / C# build output
+.mono/
+*.mono
+bin/
+obj/
+
+# Visual Studio / VS Code
+.vs/
+.vscode/*
+!.vscode/extensions.json
+
+# OS cruft
+.DS_Store
+Thumbs.db
