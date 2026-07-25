@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "geequlim.godot-tools",
+    "ms-dotnettools.csharp",
+    "eamodio.gitlens",
+    "editorconfig.editorconfig"
+  ]
+}
