@@ -1,17 +1,16 @@
 class_name Party extends Node
 
-@export var heroes: Array[Hero] = []
+@export var hero_db: HeroDatabase
+var heroes: Array[Hero] = []
 var party_size: int = 3
 signal hero_loaded
 
 func _ready() -> void:
-	# load heroes when player is created
-	load_heroes()
+	pass
 
-func load_heroes() -> void:
-	heroes.append(load("res://heroes/h_Ahku.tres"))
-	heroes.append(load("res://heroes/h_Genesis.tres"))
-	heroes.append(load("res://heroes/h_Vayne.tres"))
+func load_party() -> void:
+	for hero in hero_db.heroes:
+		heroes.append(hero.duplicate())
 	hero_loaded.emit() # Signal that a hero has been loaded
 	print("Party loaded successfully with ", heroes.size(), " heroes")
 

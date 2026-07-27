@@ -1,20 +1,19 @@
-class_name PlayerDeck
-extends Node
+class_name PlayerDeck extends Node
 
-signal deck_loaded
-
-@export var cards: Array[Card] = []
+@export var card_db: CardDatabase
+var cards: Array[Card] = []
 var hand: Array[Card] = []
 var max_hand_size: int = 5
 
-func _ready():
-	# Load cards when the player is created
-	load_deck()
+signal deck_loaded
 
+func _ready():
+	pass
+
+# Add your cards to the deck
 func load_deck():
-	# Add your cards to the deck
-	cards.append(load("res://cards/card_fireball.tres"))
-	cards.append(load("res://cards/card_frostbolt.tres"))
+	for card in card_db.cards:
+		cards.append(card.duplicate())
 	deck_loaded.emit() # Signal when deck is loaded
 	print("Deck loaded successfully with ", cards.size(), " cards")
 
@@ -64,23 +63,18 @@ func print_deck():
 	print("=== PLAYER DECK ===")
 	print("Total cards: ", cards.size())
 
-	if cards.is_empty():
-		print("No cards in deck!")
-		return
-
 	for i in range(cards.size()):
 		var card: Card = cards[i]
-		if card == null:
+		if !card:
 			print("[%d] NULL CARD" % i)
 		else:
-			print("[%d] %s - Cost: %d | Damage: %d | Effects: %s | Effect Duration: %d | Rarity: %s" % [
+			print("[%d] %s - Cost: %d | Damage: %d | Effects: %s | Effect Duration: %d" % [
 				i,
 				card.name,
 				card.cost,
 				card.damage,
 				", ".join(card.effects),
 				card.effect_duration,
-				card.rarity,
 			])
 
 	print("=== END DECK ===")

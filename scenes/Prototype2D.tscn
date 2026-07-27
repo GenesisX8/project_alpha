@@ -1,11 +1,17 @@
 [gd_scene format=3 uid="uid://twc76f3ywsf2"]
 
+[ext_resource type="Script" uid="uid://bpt2g8i8sm862" path="res://scripts/enemy_script.gd" id="1_2ae2n"]
 [ext_resource type="Script" uid="uid://bvxu8qgl52h4v" path="res://scripts/party.gd" id="2_kov5e"]
 [ext_resource type="Script" uid="uid://cvbasphodfhb7" path="res://scripts/player_script.gd" id="2_lkccu"]
+[ext_resource type="Resource" uid="uid://b3jb6a3yxrq60" path="res://enemies/enemy_db.tres" id="2_nu6ef"]
 [ext_resource type="Script" uid="uid://k63o7hxb7kjk" path="res://scripts/game_controller.gd" id="3_kov5e"]
 [ext_resource type="Script" uid="uid://d28ps6e74wd5l" path="res://scripts/player_deck.gd" id="3_skeuc"]
+[ext_resource type="Resource" uid="uid://debb2rwa4anaf" path="res://heroes/hero_db.tres" id="5_2rryk"]
+[ext_resource type="Resource" uid="uid://b3fhte6ff64u8" path="res://cards/card_db.tres" id="7_5haav"]
 
 [node name="Prototype2D" type="Node2D" unique_id=227060942]
+script = ExtResource("1_2ae2n")
+enemy_db = ExtResource("2_nu6ef")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=941632508]
 
@@ -14,9 +20,12 @@ script = ExtResource("2_lkccu")
 
 [node name="Party" type="Node" parent="Player" unique_id=916675953]
 script = ExtResource("2_kov5e")
+hero_db = ExtResource("5_2rryk")
 
 [node name="Deck" type="Node" parent="Player" unique_id=1043611701]
 script = ExtResource("3_skeuc")
+card_db = ExtResource("7_5haav")
 
-[node name="GameController" type="Node" parent="." unique_id=11501402]
+[node name="GameController" type="Node" parent="." unique_id=11501402 node_paths=PackedStringArray("prototype2d")]
 script = ExtResource("3_kov5e")
+prototype2d = NodePath("..")
