@@ -1,6 +1,6 @@
 # Project Alpha — CLAUDE.md
 
-Godot 4.7.1 (Mono/.NET build), 2D pixel-art tactical turn-based RPG. Single-player, PC desktop only (Windows/Mac/Linux) for v1.
+Godot 4.7.1 (standard build), 2D pixel-art tactical turn-based RPG. Single-player, PC desktop only (Windows/Mac/Linux) for v1.
 
 Full design context lives in [docs/design/](docs/design/) — read those before making gameplay/rules decisions. This file is technical/process guidance only.
 
@@ -19,12 +19,12 @@ Full design context lives in [docs/design/](docs/design/) — read those before 
 
 ## Tech stack
 
-- **Engine**: Godot 4.7.1, Mono/.NET build (`config/features` includes `"C#"` and there's a `.csproj`/`.sln`).
-- **Primary language: GDScript.** C# is enabled only for optionality — **do not add new C# scripts or suggest a C# port without asking first.** The project previously had stray C# stub files (`NewScript.cs`) that were deleted; treat that as confirmation GDScript is the intended path.
+- **Engine**: Godot 4.7.1, **standard build** — *not* the Mono/.NET build. There is no `.csproj`/`.sln` and `config/features` does not include `"C#"`.
+- **Language: GDScript, exclusively.** C# is not available in this project — **do not add C# scripts or suggest a C# port.** The project previously had stray C# stub files (`NewScript.cs`) that were deleted; treat that as confirmation GDScript is the intended path.
 - Physics is left at Godot defaults (`Jolt Physics` for 3D) — irrelevant to this 2D game's logic, not a deliberate choice.
 - Rendering: Forward+, `d3d12` device driver on Windows (editor/local machine default, not a shipping decision yet).
 - Godot editor path for VS Code is configured in `.vscode/settings.json` (`godotTools.editorPath.godot4`) — keep that in sync if the editor install moves. Note that `.vscode/` is gitignored (except `extensions.json`), so this path is machine-local and not shared.
-- **Keeping the Mono/.NET build is a deliberate, revisited decision** (2026-07-24). Stripping C# was proposed — smaller exports, no .NET SDK in CI — and explicitly declined; the Mono editor build stays. Don't re-raise it unprompted.
+- **.NET/C# was removed — this is settled** (2026-07-26). The project was originally created with the Mono/.NET editor build by mistake; .NET was subsequently stripped and the standard build is now correct. Use the standard Godot 4.7.1 build on every machine. Don't propose reintroducing C#/Mono unprompted.
 
 ## Tooling
 

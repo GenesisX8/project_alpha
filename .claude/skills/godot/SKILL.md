@@ -218,7 +218,7 @@ comment in `.gitignore` about keeping signing secrets out of it.
   uses: chickensoft-games/setup-godot@v2
   with:
     version: 4.7.1
-    use-dotnet: true   # this project uses the Mono/.NET editor build
+    use-dotnet: false  # this project uses the standard (non-.NET) editor build
     include-templates: true
 
 - name: Run GdUnit4 Tests

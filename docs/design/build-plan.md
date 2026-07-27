@@ -15,7 +15,7 @@
 9. **Real UI/UX and juice** — art (pixel art), animations, audio — last, once mechanics are locked.
 10. **AI opponent** — built against the same state machine as the UI, not against the UI itself.
 
-Everything below expands on why each step matters and Godot-specific notes for this project (Godot 4.7.1, Mono/.NET build, **GDScript as the primary language**).
+Everything below expands on why each step matters and Godot-specific notes for this project (Godot 4.7.1, standard build, **GDScript as the only language**).
 
 ## 1. Rules document
 
@@ -91,5 +91,5 @@ Write enemy AI against the `GameState` API from step 3 — the same interface th
 - **Randomness/determinism** — decide early if shuffles/draws need to be seeded/replayable (useful for debugging and reproducing bug reports).
 - **Undo/replay logging** — if state mutations are centralized (steps 3/4), logging every action for replay/debugging is nearly free; bolting it on later is not.
 - **Mulligan/redraw rules and empty-deck behavior** — flagged as open questions in [rules.md](rules.md); commonly forgotten edge cases.
-- **GDScript vs. C# split — resolved.** The project has both enabled (`config/features` includes `"C#"`, there's a `.csproj`), but the decision is: **primarily GDScript.** C# stays enabled for optionality only; don't introduce new C# code or split logic across both languages without discussing it first (see [CLAUDE.md](../../CLAUDE.md)).
+- **GDScript vs. C# split — resolved, and no longer a split.** .NET/C# was removed from the project; it runs on the standard Godot build, so **GDScript is the only option.** There is no `.csproj` and `config/features` does not include `"C#"` (see [CLAUDE.md](../../CLAUDE.md)).
 - **Testing the rules engine in isolation** — since it's UI-agnostic, GUT (Godot Unit Test) or plain script-based tests can simulate full battles without ever opening a scene. Worth setting up once step 3 exists, since these interaction rules are exactly the kind of thing that silently breaks when card #47 gets added.

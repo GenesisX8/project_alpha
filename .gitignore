@@ -16,12 +16,6 @@ export_presets/*
 # encryption key to a preset, re-ignore this file or move the secrets into a
 # gitignored override before committing.
 
-# Mono / C# build output
-.mono/
-*.mono
-bin/
-obj/
-
 # Visual Studio / VS Code
 .vs/
 .vscode/*

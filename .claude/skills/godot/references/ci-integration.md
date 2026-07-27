@@ -2,7 +2,7 @@
 
 This guide covers CI setup for GdUnit4 (GDScript unit tests).
 
-> **Project Alpha:** engine is Godot **4.7.1** (Mono/.NET build). gdUnit4 stable
+> **Project Alpha:** engine is Godot **4.7.1** (standard build, no .NET). gdUnit4 stable
 > (v6.1.3) does not yet support 4.7 — see SKILL.md before wiring this up.
 
 ---

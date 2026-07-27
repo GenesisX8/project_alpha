@@ -10,8 +10,8 @@
 | **Genre** | Tactical Turn-Based RPG (party-based, stationary combat) with an additive card-based ability system |
 | **Players** | Single-player |
 | **Platform (v1)** | PC desktop — Windows, Mac, Linux |
-| **Engine** | Godot 4.7.1 (Mono/.NET build) |
-| **Primary language** | GDScript (C# enabled in-project but not actively used) |
+| **Engine** | Godot 4.7.1 (standard build) |
+| **Primary language** | GDScript (C#/.NET not used — removed from the project) |
 | **Visual style** | 2D pixel art |
 
 ## Pitch
@@ -55,7 +55,7 @@ Cards represent spells, buffs, and traps that supplement a character's fixed ski
 
 ## Technical specs
 
-- **Engine**: Godot 4.7.1, Mono/.NET build.
+- **Engine**: Godot 4.7.1, standard build (no .NET/C#).
 - **Rendering**: Forward+.
 - **Target platform**: PC desktop (Windows/Mac/Linux) for v1. Mobile/console explicitly out of scope for now (the original template's iOS/Android/console list was aspirational, not a v1 commitment).
 - **Visual style**: 2D pixel art. Current placeholder art (`sprites/chibi_player.svg`) is a vector chibi-style asset and will be replaced — it does not represent final direction.

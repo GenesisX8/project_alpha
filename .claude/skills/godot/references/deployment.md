@@ -9,8 +9,8 @@
 ## Prerequisites
 
 Export templates must match the editor version **and** build flavor. This
-project uses the **Mono/.NET** build of Godot 4.7.1, so you need the Mono
-export templates, not the standard ones.
+project uses the **standard** build of Godot 4.7.1, so you need the standard
+export templates, not the Mono/.NET ones.
 
 ```bash
 # Confirm version and flavor before exporting
