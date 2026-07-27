@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Enemy" format=3 uid="uid://bf74q2or82j3w"]
+[ext_resource type="Script" uid="uid://c35no7yh5ias6" path="res://scripts/enemy.gd" id="1_ibgmb"]
+
+[resource]
+script = ExtResource("1_ibgmb")
+id = 2
+name = "Scorpion"
+description = "A deadly scorpion lurking in the shadows."
+type = "Beast"
+health = 25
+attack = 20
+defense = 10
+skills = ["Sting", "Tail Whip"]

@@ -1,25 +1,22 @@
 [gd_scene format=3 uid="uid://twc76f3ywsf2"]
 
-[ext_resource type="Texture2D" uid="uid://2fexx24iwosu" path="res://sprites/chibi_player.svg" id="1_meae1"]
+[ext_resource type="Script" uid="uid://bvxu8qgl52h4v" path="res://scripts/party.gd" id="2_kov5e"]
 [ext_resource type="Script" uid="uid://cvbasphodfhb7" path="res://scripts/player_script.gd" id="2_lkccu"]
+[ext_resource type="Script" uid="uid://k63o7hxb7kjk" path="res://scripts/game_controller.gd" id="3_kov5e"]
 [ext_resource type="Script" uid="uid://d28ps6e74wd5l" path="res://scripts/player_deck.gd" id="3_skeuc"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_c1qga"]
-size = Vector2(142, 237)
 
 [node name="Prototype2D" type="Node2D" unique_id=227060942]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=941632508]
 
-[node name="Player" type="CharacterBody2D" parent="." unique_id=454803634]
+[node name="Player" type="Node" parent="." unique_id=104365224]
 script = ExtResource("2_lkccu")
 
-[node name="Sprite2D" type="Sprite2D" parent="Player" unique_id=1352587895]
-texture = ExtResource("1_meae1")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=1155293727]
-position = Vector2(-2, -6.5)
-shape = SubResource("RectangleShape2D_c1qga")
+[node name="Party" type="Node" parent="Player" unique_id=916675953]
+script = ExtResource("2_kov5e")
 
 [node name="Deck" type="Node" parent="Player" unique_id=1043611701]
 script = ExtResource("3_skeuc")
+
+[node name="GameController" type="Node" parent="." unique_id=11501402]
+script = ExtResource("3_kov5e")
