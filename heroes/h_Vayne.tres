@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="Hero" format=3 uid="uid://cf3nu6s5bq78j"]
+
+[ext_resource type="Script" uid="uid://br7hijmkwbd2t" path="res://scripts/hero.gd" id="1_ibgmb"]
+
+[resource]
+script = ExtResource("1_ibgmb")
+id = 3
+name = "Vayne"
+description = "A skilled archer with a mysterious past."
+health = 85
+attack = 20
+defense = 10

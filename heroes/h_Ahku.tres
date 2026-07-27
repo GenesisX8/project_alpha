@@ -1,5 +1,4 @@
 [gd_resource type="Resource" script_class="Hero" format=3 uid="uid://bpt3fhydpok3j"]
-
 [ext_resource type="Script" uid="uid://br7hijmkwbd2t" path="res://scripts/hero.gd" id="1_ibgmb"]
 
 [resource]

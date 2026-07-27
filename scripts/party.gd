@@ -1,7 +1,7 @@
 class_name Party extends Node
 
 @export var heroes: Array[Hero] = []
-var party_size: int = 1
+var party_size: int = 3
 signal hero_loaded
 
 func _ready() -> void:
@@ -10,6 +10,8 @@ func _ready() -> void:
 
 func load_heroes() -> void:
 	heroes.append(load("res://heroes/h_Ahku.tres"))
+	heroes.append(load("res://heroes/h_Genesis.tres"))
+	heroes.append(load("res://heroes/h_Vayne.tres"))
 	hero_loaded.emit() # Signal that a hero has been loaded
 	print("Party loaded successfully with ", heroes.size(), " heroes")
 

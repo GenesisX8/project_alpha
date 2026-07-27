@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Enemy" format=3 uid="uid://si0wfw6cn7jg"]
+[ext_resource type="Script" uid="uid://c35no7yh5ias6" path="res://scripts/enemy.gd" id="1_ibgmb"]
+
+[resource]
+script = ExtResource("1_ibgmb")
+id = 1
+name = "Wolf"
+description = "A fierce wolf roaming the forests."
+type = "Beast"
+health = 30
+attack = 15
+defense = 5
+skills = ["Roar", "Bite"]
