@@ -1,7 +1,7 @@
 class_name GameController extends Node
 
 @export var prototype2d: Node2D
-@export var debug_print: bool = false
+@export var debug_enemies: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -23,8 +23,8 @@ func start_combat() -> void:
 	# print("Loading enemy assets...")
 	prototype2d.load_enemies()
 
-	# Print enemies if debug print is enabled
-	if debug_print:
+	# Print enemies if debug_enemies is enabled
+	if debug_enemies:
 		prototype2d.print_enemies()	
 	
 	# print("Enemy assets loaded.")
