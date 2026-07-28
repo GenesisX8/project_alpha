@@ -29,10 +29,11 @@ func print_enemies() -> void:
 		if !enemy:
 			print("[%d] NULL ENEMY" % enemy)
 		else:
-			print("Enemy: [%d] %s - Health: %d | Attack: %d | Defense: %d" % [
+			print("Enemy: [%d] %s - Max Health: %d | Current Health: %d | Attack: %d | Defense: %d" % [
 				enemy.id, 
 				enemy.name, 
-				enemy.health, 
+				enemy.max_health, 
+				enemy.current_health, 
 				enemy.attack, 
 				enemy.defense
 			])

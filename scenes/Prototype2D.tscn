@@ -13,7 +13,91 @@
 script = ExtResource("1_2ae2n")
 enemy_db = ExtResource("2_nu6ef")
 
+[node name="CombatCanvas" type="CanvasLayer" parent="." unique_id=1026193225]
+
+[node name="CombatMenu" type="VBoxContainer" parent="CombatCanvas" unique_id=1158280068]
+offset_left = 63.0
+offset_top = 213.0
+offset_right = 131.0
+offset_bottom = 266.0
+theme_override_constants/separation = 2
+
+[node name="AttackButton" type="Button" parent="CombatCanvas/CombatMenu" unique_id=2077748160]
+layout_mode = 2
+size_flags_vertical = 0
+focus_neighbor_left = NodePath("../SkillButton")
+focus_neighbor_top = NodePath("../SkillButton")
+focus_neighbor_right = NodePath("../DefendButton")
+focus_neighbor_bottom = NodePath("../DefendButton")
+focus_next = NodePath("../DefendButton")
+focus_previous = NodePath("../SkillButton")
+theme_override_font_sizes/font_size = 6
+text = "Attack"
+
+[node name="DefendButton" type="Button" parent="CombatCanvas/CombatMenu" unique_id=2118660351]
+layout_mode = 2
+focus_neighbor_left = NodePath("../AttackButton")
+focus_neighbor_top = NodePath("../AttackButton")
+focus_neighbor_right = NodePath("../SkillButton")
+focus_neighbor_bottom = NodePath("../SkillButton")
+focus_next = NodePath("../SkillButton")
+focus_previous = NodePath("../AttackButton")
+theme_override_font_sizes/font_size = 6
+text = "Defend	"
+
+[node name="SkillButton" type="Button" parent="CombatCanvas/CombatMenu" unique_id=723816130]
+layout_mode = 2
+focus_neighbor_left = NodePath("../DefendButton")
+focus_neighbor_top = NodePath("../DefendButton")
+focus_neighbor_right = NodePath("../AttackButton")
+focus_neighbor_bottom = NodePath("../AttackButton")
+focus_next = NodePath("../AttackButton")
+focus_previous = NodePath("../DefendButton")
+theme_override_font_sizes/font_size = 6
+text = "Skill"
+
+[node name="TargetMenu" type="VBoxContainer" parent="CombatCanvas" unique_id=746725678]
+offset_left = 140.0
+offset_top = 213.0
+offset_right = 208.0
+offset_bottom = 268.0
+theme_override_constants/separation = 2
+
+[node name="Target1Button" type="Button" parent="CombatCanvas/TargetMenu" unique_id=1692470223]
+layout_mode = 2
+focus_neighbor_left = NodePath("../Target3Button")
+focus_neighbor_top = NodePath("../Target3Button")
+focus_neighbor_right = NodePath("../Target2Button")
+focus_neighbor_bottom = NodePath("../Target2Button")
+focus_next = NodePath("../Target2Button")
+focus_previous = NodePath("../Target3Button")
+theme_override_font_sizes/font_size = 6
+text = "Target 1"
+
+[node name="Target2Button" type="Button" parent="CombatCanvas/TargetMenu" unique_id=541637068]
+layout_mode = 2
+focus_neighbor_left = NodePath("../Target1Button")
+focus_neighbor_top = NodePath("../Target1Button")
+focus_neighbor_right = NodePath("../Target3Button")
+focus_neighbor_bottom = NodePath("../Target3Button")
+focus_next = NodePath("../Target3Button")
+focus_previous = NodePath("../Target1Button")
+theme_override_font_sizes/font_size = 6
+text = "Target 2"
+
+[node name="Target3Button" type="Button" parent="CombatCanvas/TargetMenu" unique_id=190226830]
+layout_mode = 2
+focus_neighbor_left = NodePath("../Target2Button")
+focus_neighbor_top = NodePath("../Target2Button")
+focus_neighbor_right = NodePath("../Target1Button")
+focus_neighbor_bottom = NodePath("../Target1Button")
+focus_next = NodePath("../Target1Button")
+focus_previous = NodePath("../Target2Button")
+theme_override_font_sizes/font_size = 6
+text = "Target 3"
+
 [node name="Camera2D" type="Camera2D" parent="." unique_id=941632508]
+position = Vector2(246, 135)
 
 [node name="Player" type="Node" parent="." unique_id=104365224]
 script = ExtResource("2_lkccu")
@@ -26,8 +110,23 @@ hero_db = ExtResource("5_2rryk")
 script = ExtResource("3_skeuc")
 card_db = ExtResource("7_5haav")
 
-[node name="GameController" type="Node" parent="." unique_id=11501402 node_paths=PackedStringArray("prototype2d", "party", "player_deck")]
+[node name="GameController" type="Node" parent="." unique_id=11501402 node_paths=PackedStringArray("player_deck", "party", "prototype2d", "combat_menu", "attack_button", "defend_button", "skill_button", "target_menu", "target1_button", "target2_button", "target3_button")]
 script = ExtResource("3_kov5e")
-prototype2d = NodePath("..")
-party = NodePath("../Player/Party")
 player_deck = NodePath("../Player/Deck")
+party = NodePath("../Player/Party")
+prototype2d = NodePath("..")
+combat_menu = NodePath("../CombatCanvas/CombatMenu")
+attack_button = NodePath("../CombatCanvas/CombatMenu/AttackButton")
+defend_button = NodePath("../CombatCanvas/CombatMenu/DefendButton")
+skill_button = NodePath("../CombatCanvas/CombatMenu/SkillButton")
+target_menu = NodePath("../CombatCanvas/TargetMenu")
+target1_button = NodePath("../CombatCanvas/TargetMenu/Target1Button")
+target2_button = NodePath("../CombatCanvas/TargetMenu/Target2Button")
+target3_button = NodePath("../CombatCanvas/TargetMenu/Target3Button")
+
+[connection signal="pressed" from="CombatCanvas/CombatMenu/AttackButton" to="GameController" method="_on_attack_button_pressed"]
+[connection signal="pressed" from="CombatCanvas/CombatMenu/DefendButton" to="GameController" method="_on_defend_button_pressed"]
+[connection signal="pressed" from="CombatCanvas/CombatMenu/SkillButton" to="GameController" method="_on_skill_button_pressed"]
+[connection signal="pressed" from="CombatCanvas/TargetMenu/Target1Button" to="GameController" method="_on_target_1_button_pressed"]
+[connection signal="pressed" from="CombatCanvas/TargetMenu/Target2Button" to="GameController" method="_on_target_2_button_pressed"]
+[connection signal="pressed" from="CombatCanvas/TargetMenu/Target3Button" to="GameController" method="_on_target_3_button_pressed"]

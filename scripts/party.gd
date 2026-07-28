@@ -23,12 +23,13 @@ func print_party() -> void:
 		if p_hero == null:
 			print("[%d] NULL HERO" % i)
 		else:
-			print("[%d] %s - Health: %d | Attack: %d | Defense: %d" % [
+			print("[%d] %s - Max Health: %d | Current Health: %d | Attack: %d | Defense: %d" % [
 				i, 
 				p_hero.name, 
-				p_hero.health, 
-				p_hero.attack, 
-				p_hero.defense, 
+				p_hero.max_health,
+				p_hero.current_health,
+				p_hero.attack,
+				p_hero.defense,
 				])
 
 	print("=== End of party members ===")

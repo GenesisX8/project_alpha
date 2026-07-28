@@ -1,23 +1,46 @@
 class_name GameController extends Node
 
-@export var prototype2d: Node2D
-@export var enemies: Array[Enemy]
-@export var party: Party
-@export var heroes: Array[Hero]
+enum TurnState { ACTION_MENU, TARGET_SELECT }
+
+const ACTION_LABELS: Array[String] = ["Attack", "Defend", "Skill"]
+
 @export var player_deck: PlayerDeck
 @export var deck: Array[Card]
+
+@export var party: Party
+@export var heroes: Array[Hero]
+
+@export var prototype2d: Node2D
+@export var enemies: Array[Enemy]
+
 @export var hero1: Hero
 @export var hero2: Hero
 @export var hero3: Hero
+
 @export var enemy1: Enemy
 @export var enemy2: Enemy
 @export var enemy3: Enemy
+
 @export var debug_party: bool = false
 @export var debug_enemies: bool = false
 @export var debug_turn_order: bool = false
 
-@export var first_attacker: bool = false # false for "player", true for "enemy"
+@export var combat_menu: Control
+@export var attack_button: Button
+@export var defend_button: Button
+@export var skill_button: Button
+
+@export var target_menu: Control
+@export var target1_button: Button
+@export var target2_button: Button
+@export var target3_button: Button
+
 var player_input: bool = false
+
+var _turn_state: TurnState = TurnState.ACTION_MENU
+var _cursor_index: int = 0
+var _pending_action: String = ""
+var _current_hero: Hero
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -46,6 +69,10 @@ func start_combat() -> void:
 	enemy2 = enemies[1] if enemies.size() > 1 else null
 	enemy3 = enemies[2] if enemies.size() > 2 else null
 
+	target1_button.text = enemy1.name
+	target2_button.text = enemy2.name
+	target3_button.text = enemy3.name
+
 	# Print enemies if debug_enemies is enabled
 	if debug_enemies:
 		prototype2d.print_enemies()	
@@ -55,23 +82,7 @@ func start_combat() -> void:
 
 	## Set up the initial combat environment
 	## Determine who attacks first
-	var combatants = turn_order(heroes, enemies)
-
-	if debug_turn_order:
-		print("Turn order:")	
-		for combatant in combatants:
-			print(combatant.name)
-
-	if combatants[0].label == "Hero":
-		## Player attacks first
-		player_turn()
-		print(combatants[0].name + " attacks first!")
-		pass
-	else:
-		## Enemy attacks first
-		enemy_turn()
-		print(combatants[0].name + " attacks first!")
-		pass
+	call_turn()
 
 	## Initialize player and enemy stats
 	
@@ -79,14 +90,13 @@ func start_combat() -> void:
 
 
 ## TODO: 2. Player's turn
-func player_turn() -> void:
-	listen_for_input()
+func player_turn(hero: Hero) -> void:
+	attack_button.grab_focus()
+	listen_for_input(hero)
 	return
 
-
-
 ## TODO: 3. enemy's turn
-func enemy_turn() -> void:
+func enemy_turn(_enemy: Enemy) -> void:
 	pass
 
 ## TODO: 4. End of combat
@@ -106,27 +116,112 @@ func turn_order(_heroes: Array, _enemies: Array) -> Array:
 	# Sort combatants by agility (or other criteria)
 	combatants.shuffle()
 	combatants.sort_custom(func(a, b): return a.agility > b.agility)
+
+	if debug_turn_order:
+		print("Turn order:")	
+		for combatant in combatants:
+			print(combatant.name)
+
 	return combatants
 
+func call_turn() -> void:
+	# Logic to call the appropriate turn function
+	var combatants = turn_order(heroes, enemies)
 
-func _input(event: InputEvent) -> void:
-	if not player_input:
-		return
-	if not event is InputEventKey or not event.pressed:
-		return
-	match event.keycode:
-		KEY_1:
-			select_option(1) # Handle key 1 press
-		KEY_2:
-			select_option(2) # Handle key 2 press
-		KEY_3:
-			select_option(3) # Handle key 3 press
-		
-func select_option(index: int) -> void:
-	print("Selected option: ", index)
-	player_input = false # stop listening after selection is made
-	# Attack logic would go here
+	if combatants[0].label == "Hero":
+		## Player attacks first
+		player_turn(combatants[0])
+		print(combatants[0].name + " strikes first!")
+	else:
+		## Enemy attacks first
+		enemy_turn(combatants[0])
+		print(combatants[0].name + " strkes first!")
 
-func listen_for_input() -> void:
+func listen_for_input(hero: Hero) -> void:
+	_current_hero = hero
+	_turn_state = TurnState.ACTION_MENU
+	_cursor_index = 0
+	_pending_action = ""
 	player_input = true
-	print("Choose an action: 1=Attack, 2=Defend, 3=Skill")
+
+func _get_current_options() -> Array:
+	match _turn_state:
+		TurnState.ACTION_MENU:
+			return ACTION_LABELS
+		TurnState.TARGET_SELECT:
+			return _get_valid_targets()
+	return []
+
+func _get_valid_targets() -> Array[Enemy]:
+	var targets: Array[Enemy] = []
+	for e in enemies:
+		if e != null:
+			targets.append(e)
+	return targets
+
+func _confirm_action() -> void:
+	_pending_action = ACTION_LABELS[_cursor_index]
+	match _pending_action:
+		"Attack", "Skill":
+			_turn_state = TurnState.TARGET_SELECT
+			target1_button.grab_focus()
+			_cursor_index = 0
+		"Defend":
+			print("%s defends!" % _current_hero.name)
+			_end_player_turn()
+
+func _confirm_target(target_index: int) -> void:
+	var targets := _get_valid_targets()
+	var target: Enemy = targets[target_index]
+	match _pending_action:
+		"Attack":
+			_current_hero.fattack(target)
+		"Skill":
+			# TODO: no skill-effect system yet (see docs/design/build-plan.md#5); stub only.
+			print("%s attempts a skill on %s (not implemented yet)." % [_current_hero.name, target.name])
+	_end_player_turn()
+
+func _cancel_target_selection() -> void:
+	_turn_state = TurnState.ACTION_MENU
+	_cursor_index = 0
+	_pending_action = ""
+
+func _end_player_turn() -> void:
+	player_input = false
+	_pending_action = ""
+
+# TODO: DEPRECATED REMOVE OLD CONSOLE MENU!
+# Print the current menu
+func _print_menu() -> void:
+	match _turn_state:
+		TurnState.ACTION_MENU:
+			print("-- %s's turn -- (Up/Down to move, Enter to select)" % _current_hero.name)
+			for i in ACTION_LABELS.size():
+				print(("> " if i == _cursor_index else "  ") + ACTION_LABELS[i])
+		TurnState.TARGET_SELECT:
+			print("Choose a target: (Up/Down to move, Enter to select, Esc to go back)")
+			var targets := _get_valid_targets()
+			for i in targets.size():
+				print(("> " if i == _cursor_index else "  ") + targets[i].name)
+
+
+func _on_attack_button_pressed() -> void:
+	print("%s chooses to attack!" % _current_hero.name)
+	_confirm_action()
+
+func _on_defend_button_pressed() -> void:
+	print("%s chooses to defend!" % _current_hero.name)
+	_confirm_action()
+
+func _on_skill_button_pressed() -> void:
+	print("%s chooses to use a skill!" % _current_hero.name)
+	_confirm_action()
+
+func _on_target_1_button_pressed() -> void:
+	_confirm_target(0) # 0 refers to the first target in the list
+
+func _on_target_2_button_pressed() -> void:
+	_confirm_target(1) # 1 refers to the second target in the list
+
+func _on_target_3_button_pressed() -> void:
+	_confirm_target(2) # 2 refers to the third target in the list

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://dfsvrijt4fr0u"]
+[gd_scene format=3 uid="uid://dfsvrijt4fr0u"]
 
 [ext_resource type="Texture2D" uid="uid://cbux4wmrmn458" path="res://assets/backgrounds/battle_bg_city_480x270.png" id="1_bg"]
 [ext_resource type="Texture2D" uid="uid://cc1r2r0t7nx7y" path="res://assets/actors/enemies/idol_idle_sheet_white_384x64.png" id="2_idolw"]
