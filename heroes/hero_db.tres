@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="HeroDatabase" format=3 uid="uid://debb2rwa4anaf"]
+
+[ext_resource type="Script" uid="uid://br7hijmkwbd2t" path="res://scripts/hero.gd" id="1_qbtri"]
+[ext_resource type="Script" uid="uid://drdbd18iqkog0" path="res://scripts/databases/hero_database.gd" id="2_76okb"]
+[ext_resource type="Resource" uid="uid://bpt3fhydpok3j" path="res://heroes/h_Ahku.tres" id="2_khgmh"]
+[ext_resource type="Resource" uid="uid://bml71hss6pd62" path="res://heroes/h_Genesis.tres" id="3_f63mh"]
+[ext_resource type="Resource" uid="uid://cf3nu6s5bq78j" path="res://heroes/h_Vayne.tres" id="4_wfrpt"]
+
+[resource]
+script = ExtResource("2_76okb")
+heroes = Array[ExtResource("1_qbtri")]([ExtResource("2_khgmh"), ExtResource("3_f63mh"), ExtResource("4_wfrpt")])

@@ -1,9 +1,7 @@
 class_name GameController extends Node
 
-@export var enemies: Array[Enemy] = []
-var number_of_enemies: int = 1
-
-signal enemies_loaded(enemies: Array[Enemy])
+@export var prototype2d: Node2D
+@export var debug_enemies: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -22,10 +20,14 @@ func start_combat() -> void:
 	# load_player_assets()
 
 	## Load enemy assets at combat start
-	print("Loading enemy assets...")
-	load_enemies()
-	print_enemies()
-	print("Enemy assets loaded.")
+	# print("Loading enemy assets...")
+	prototype2d.load_enemies()
+
+	# Print enemies if debug_enemies is enabled
+	if debug_enemies:
+		prototype2d.print_enemies()	
+	
+	# print("Enemy assets loaded.")
 
 	## Set up the initial combat environment
 	
@@ -52,30 +54,3 @@ func end_combat() -> void:
 # Load player assets
 func load_player_assets() -> void:
 	pass
-
-# Load enemy assets
-func load_enemies() -> void:
-	enemies.append(load("res://enemies/e_scorpion.tres").duplicate())
-	enemies.append(load("res://enemies/e_wolf.tres").duplicate())
-	enemies.append(load("res://enemies/e_wraith.tres").duplicate())
-	enemies_loaded.emit(enemies)
-	print("Enemies loaded successfully with ", enemies.size(), " enemies")
-
-func print_enemies() -> void:
-	print("=== Enemies: ===")
-
-	for i in range(enemies.size()):
-		var p_enemy = enemies[i]
-		if p_enemy == null:
-			print("[%d] NULL ENEMY" % i)
-		else:
-			print("[%d] %s - Health: %d | Attack: %d | Defense: %d | Skills: %s" % [
-				i,
-				p_enemy.name,
-				p_enemy.health,
-				p_enemy.attack,
-				p_enemy.defense,
-				", ".join(p_enemy.skills),
-			])
-
-	print("=== End of enemies ===")

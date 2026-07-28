@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="CardDatabase" format=3 uid="uid://b3fhte6ff64u8"]
+
+[ext_resource type="Script" uid="uid://swm7ld7vekxd" path="res://scripts/card.gd" id="1_y72q2"]
+[ext_resource type="Resource" uid="uid://de7vo0cl6hswe" path="res://cards/card_fireball.tres" id="2_528ij"]
+[ext_resource type="Script" uid="uid://hrc3jtghbk6x" path="res://scripts/databases/card_database.gd" id="2_ba51d"]
+[ext_resource type="Resource" uid="uid://mtvelbh76uhs" path="res://cards/card_frostbolt.tres" id="3_xsvrf"]
+
+[resource]
+script = ExtResource("2_ba51d")
+cards = Array[ExtResource("1_y72q2")]([ExtResource("2_528ij"), ExtResource("3_xsvrf")])
