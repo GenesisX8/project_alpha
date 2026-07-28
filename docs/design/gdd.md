@@ -53,16 +53,45 @@ Cards represent spells, buffs, and traps that supplement a character's fixed ski
 - Character roster — classes/archetypes, how many at launch, stat spread.
 - Enemy composition — typical enemy group size, whether enemies also use cards or just fixed skill lists.
 
+## Battle scene presentation
+
+Reference implementation: [`scenes/BattleScene.tscn`](../../scenes/BattleScene.tscn).
+
+**Locked art constants**
+
+| | |
+|---|---|
+| Base canvas | 480 × 270 — integer-scales 4× to 1080p, 8× to 4K |
+| Tile grid | 16 × 16 |
+| Character sheet cell | 64 × 64, uniform for all character animations |
+| VFX / spell cell | 96 × 96 or 128 × 128 (effects expand past the body box) |
+| Sprite anchor | **feet**, not center |
+| Sprite dimensions | multiples of 8, prefer 16 |
+| Idle animation | ~10 fps; attack animations ~10–12 fps |
+
+**Layout convention — party on the LEFT, enemies on the RIGHT.** This is deliberately mirrored from Final Fantasy VI, which puts the party on the right because it was authored for right-to-left reading order. This project targets left-to-right readers, so the party leads.
+
+**Facing/authoring rule** — author *every* character facing **right**; mirror enemies with `flip_h` in-engine. Never mirror source art files. Two mirrored source files means two lighting conventions and no way to reuse a sprite when a combatant changes sides.
+
+**Scene layer order** (back to front): `Background → Actors → VFX → UI (CanvasLayer)`. UI lives in a `CanvasLayer` so it never moves with the camera.
+
+**Actor node pattern** — each actor is a `Node2D` positioned *at its feet*, with the visual as a child offset upward. This keeps combatants of differing heights on a shared ground line and means swapping a placeholder for real art never invalidates a position.
+
+**Nothing about the UI is settled.** The current bottom panels are a blocked-out guess at an FF6-style command/status layout, and they are deliberately semi-transparent — do not assume the lower quarter of the background is occluded.
+
+**Silhouettes + runtime shaders** is the art direction under evaluation. Source sprites are flat white on transparent; colour, damage feedback, status and enemy-family identity are all applied in-engine. See [docs/tech/vfx-catalog.md](../tech/vfx-catalog.md) for the shader library, the sprite-authoring rules it depends on, and the proposed effect-to-game-state mapping. Not committed — but it is the current answer to having no dedicated artist.
+
 ## Technical specs
 
 - **Engine**: Godot 4.7.1, standard build (no .NET/C#).
 - **Rendering**: Forward+.
 - **Target platform**: PC desktop (Windows/Mac/Linux) for v1. Mobile/console explicitly out of scope for now (the original template's iOS/Android/console list was aspirational, not a v1 commitment).
-- **Visual style**: 2D pixel art. Current placeholder art (`sprites/chibi_player.svg`) is a vector chibi-style asset and will be replaced — it does not represent final direction.
+- **Visual style**: 2D pixel art — see [Battle scene presentation](#battle-scene-presentation) for locked resolution and sprite constants.
 - **Save/persistence**: out of scope for the current prototyping phase. Focus is proving out one full battle end-to-end first (see [build-plan.md](build-plan.md)).
 
 ## Open questions (design-level, cross-cutting)
 
 - Progression/meta systems (leveling, equipment, currency) — not yet discussed at all.
 - Narrative/setting — genre and mechanics are defined; no story, world, or tone decisions have been made yet.
-- Art pipeline — who's producing pixel art assets, target resolution/tile size, reference style.
+- Art pipeline — **no dedicated artist**, so this is a real constraint, not a scheduling detail. Resolution and sprite constants are now locked (see [Battle scene presentation](#battle-scene-presentation)); the open part is *style and production method*. Currently exploring AI generation. The leading candidate is a **flat silhouette** style — single-color shapes with binary alpha — chosen specifically because it removes the failure mode AI art generators are worst at (palette drift, inconsistent shading and line weight across a roster). Under evaluation, not committed.
+- Setting/tone — a cyberpunk/neon-noir direction is being explored via the current background and enemy concepts, but no narrative or world decisions have been made.

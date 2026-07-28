@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2fexx24iwosu"
-path="res://.godot/imported/chibi_player.svg-e7f50f046fe4446e520a0bcea5297013.ctex"
+uid="uid://b8e2dnyhj3ifc"
+path="res://.godot/imported/idol_idle_sheet_384x64.png-919fafb3dc0dbf269e2d85decddd9172.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/chibi_player.svg"
-dest_files=["res://.godot/imported/chibi_player.svg-e7f50f046fe4446e520a0bcea5297013.ctex"]
+source_file="res://assets/actors/enemies/idol_idle_sheet_384x64.png"
+dest_files=["res://.godot/imported/idol_idle_sheet_384x64.png-919fafb3dc0dbf269e2d85decddd9172.ctex"]
 
 [params]
 
@@ -38,6 +38,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false

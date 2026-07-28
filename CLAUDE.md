@@ -6,7 +6,8 @@ Full design context lives in [docs/design/](docs/design/) — read those before 
 
 ## Core concept (locked in)
 
-- **Combat**: Traditional stationary-party JRPG-style battles (Final Fantasy / Dragon Quest era) — characters do **not** move on a spatial grid. An earlier draft in `documents/Game Design.docx` implied grid-based tactics; that direction was explicitly dropped.
+- **Combat**: Traditional stationary-party JRPG-style battles (Final Fantasy / Dragon Quest era) — characters do **not** move on a spatial grid. An earlier draft implied grid-based tactics; that direction was explicitly dropped.
+- **Battle layout**: party renders on the **LEFT**, enemies on the **RIGHT** — deliberately mirrored from FF6, which was authored for right-to-left reading order.
 - **Party**: Full party of multiple player-controlled characters vs. a group of enemies (not a single hero).
 - **Turn order**: dynamic, Speed/Agility-stat-based (recomputed each round — classic Final Fantasy style), not a fixed party-then-enemies alternation.
 - **Actions**: Each character's turn uses a standard JRPG action menu (Attack / Skill / Item / Defend) **plus** an optional "Play Card" — playing a card can combine with a standard action rather than consuming the whole turn.
@@ -33,16 +34,19 @@ Full design context lives in [docs/design/](docs/design/) — read those before 
 - **MCP: none, deliberately** (evaluated 2026-07-24). [hi-godot/godot-ai](https://github.com/hi-godot/godot-ai) was installed and then removed: it requires an addon in `addons/`, which forces an `[editor_plugins]` entry and an autoload into `project.godot`. Either vendor 1.8 MB / 245 files into the game repo, or leave `project.godot` pointing at a gitignored path (measured: 3 non-fatal startup errors, game still runs). Neither is worth it yet — the headless `godot` CLI below already covers validation and testing, and live scene-tree/screenshot tooling only pays off at build-plan steps 6/9 (UI work). **Revisit then**, not before. [Coding-Solo/godot-mcp](https://github.com/Coding-Solo/godot-mcp) is the addon-free alternative if the repo footprint is the blocker, but it was 3 months stale with no stated 4.7 support.
 - **Headless checks** (fast, no editor window):
   - `godot --headless --path . --quit` — imports the project and surfaces parse/load errors.
-  - `godot --headless --path . --import` — rebuilds `.godot/` caches. **Needed after renaming any script**: Godot resolves `ext_resource` by `uid://` first, so a stale `.godot/uid_cache.bin` keeps pointing at the old path even after the `.tscn` is updated.
+  - `godot --headless --path . --import` — rebuilds `.godot/` caches. **Needed after renaming any script**: Godot resolves `ext_resource` by `uid://` first, so a stale `.godot/uid_cache.bin` keeps pointing at the old path even after the `.tscn` is updated. This **also compiles shaders** and prints `SHADER ERROR:` on failure — the only way to validate a `.gdshader` without opening the editor.
+  - `godot --headless --path . res://scenes/Foo.tscn --quit-after 5` — instantiates one scene for a few frames. Surfaces missing resources and bad node paths. Note it uses a dummy renderer, so it does *not* validate shaders; use `--import` for that.
 
 ## Where things live
 
 - `scripts/` — GDScript source. Card data model (`card.gd`), deck/hand management (`player_deck.gd`), scene controllers (`game_controller.gd`, `player_script.gd`).
-- `scenes/` — `.tscn` scene files. `Prototype2D.tscn` is the current combat/movement prototype.
+- `scenes/` — `.tscn` scene files. `BattleScene.tscn` is the battle-screen mock-up (layout, background, placeholder actors — no logic wired yet); `Prototype2D.tscn` is the older logic-node prototype.
 - `cards/` — `.tres` `Card` Resource instances (data, not code) — e.g. `card_fireball.tres`, `card_frostbolt.tres`. This is the card database; expect it to grow significantly and eventually need an import/editor pipeline (see build plan).
-- `sprites/` — art assets. Currently placeholder vector art (`chibi_player.svg`); final art direction is pixel art (see gdd.md).
+- `assets/` — art assets, by role: `backgrounds/`, `actors/heroes/`, `actors/enemies/`, `vfx/`. Replaced the old `sprites/` folder (deleted 2026-07-26 with its unused `chibi_player.svg` placeholder). Art direction and locked pixel constants live in [gdd.md](docs/design/gdd.md#battle-scene-presentation) — **party renders on the LEFT, enemies on the RIGHT** (mirrored from FF6 on purpose).
+- `shaders/` — `.gdshader` files, `snake_case`, one effect per file. Keep them here rather than embedded in `.tscn` sub-resources: they stay reusable across scenes and readable in a diff. Catalogued in [docs/tech/vfx-catalog.md](docs/tech/vfx-catalog.md), which also lists the sprite-authoring rules several of them depend on.
 - `docs/design/` — **canonical, living design documentation.** Update these as decisions are made in conversation.
-- `documents/` — legacy plain-text notes (`Game Design.docx`, `Rules.docx`, `Game Build.docx` — despite the `.docx` extension, these are plain text, not real Word files). Their content has been migrated into `docs/design/`. Kept as-is at the user's request; **treat `docs/design/` as authoritative when the two disagree.**
+- `docs/tech/` — technical reference that isn't a design decision (shader catalogue, pipeline notes).
+- `documents/` — **gone.** Held legacy plain-text notes (`Game Design.docx`, `Rules.docx`, `Game Build.docx` — plain text despite the extension); deleted from the repo once their content was migrated into `docs/design/`. The "Migrated from `documents/…`" lines at the top of the design docs are provenance notes, not live paths.
 
 No task tracker is set up yet (deliberately — revisit later if needed). Roadmap/milestones live inline in `docs/design/build-plan.md`.
 

@@ -80,7 +80,9 @@ Hand-editing dozens of `.tres` Resource files in the Inspector doesn't scale. Co
 
 ## 9. Real UI/UX and polish
 
-Once mechanics are proven: pixel art assets (replacing the current placeholder `chibi_player.svg`), animations for attacks/effects, sound/juice. Cheapest to do last, against locked rules — and the most tempting to start with first, which is exactly why it's ordered last here.
+Once mechanics are proven: final pixel art assets, animations for attacks/effects, sound/juice. Cheapest to do last, against locked rules — and the most tempting to start with first, which is exactly why it's ordered last here.
+
+**Note (2026-07-26):** a *presentation mock-up* has been built out of order, ahead of steps 3–6 — see [`scenes/BattleScene.tscn`](../../scenes/BattleScene.tscn) and [gdd.md](gdd.md#battle-scene-presentation). This is deliberate and not a reordering of the plan: with no dedicated artist, the art *production method* is an open risk that needs answering early, and a static mock-up is the cheapest way to test it. Battle logic still follows the order above.
 
 ## 10. AI opponent
 
