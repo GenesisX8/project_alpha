@@ -3,7 +3,6 @@ extends Node
 @onready var deck: PlayerDeck = $Deck
 @onready var party: Party = $Party
 
-@export var debug_party: bool = false
 @export var debug_deck: bool = false
 @export var debug_hand: bool = false
 
@@ -12,21 +11,10 @@ func _ready() -> void:
 	# Load the player's party
 	# print("About to load party...")
 	await get_tree().process_frame
-	
-	# print("Calling load_party() now...")
-	party.load_party()
-
-	if debug_party:
-		party.print_party()
-	# print("Done calling load_party()")
-	# Finished loading party
 
 	# Load the player's deck
 	# print("About to load deck...")
 	await get_tree().process_frame
-
-	# print("Calling load_deck() now...")
-	deck.load_deck()
 
 	# Print the deck if debug_deck is enabled
 	if debug_deck:

@@ -5,10 +5,13 @@
 [resource]
 script = ExtResource("1_ibgmb")
 id = 2
+label = "Enemy"
+level = 1
 name = "Wolf"
 description = "A fierce wolf roaming the forests."
 type = "Beast"
 health = 30
 attack = 15
 defense = 5
+agility = 25
 skills = Array[String](["Roar", "Bite"])

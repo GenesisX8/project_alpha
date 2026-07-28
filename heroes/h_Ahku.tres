@@ -1,12 +1,17 @@
 [gd_resource type="Resource" script_class="Hero" format=3 uid="uid://bpt3fhydpok3j"]
+
 [ext_resource type="Script" uid="uid://br7hijmkwbd2t" path="res://scripts/hero.gd" id="1_ibgmb"]
 
 [resource]
 script = ExtResource("1_ibgmb")
 id = 1
+label = "Hero"
+level = 1
 name = "Ahku"
 description = "A powerful warrior from the northern lands."
 health = 100
 attack = 25
 defense = 15
+agility = 10
+skills = Array[String](["Attack", "Charge", "Mortal Strike"])
 metadata/_custom_type_script = "uid://br7hijmkwbd2t"

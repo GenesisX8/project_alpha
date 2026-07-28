@@ -8,11 +8,12 @@ signal hero_loaded
 func _ready() -> void:
 	pass
 
-func load_party() -> void:
+func load_party() -> Array[Hero]:
 	for hero in hero_db.heroes:
 		heroes.append(hero.duplicate())
 	hero_loaded.emit() # Signal that a hero has been loaded
 	print("Party loaded successfully with ", heroes.size(), " heroes")
+	return heroes
 
 func print_party() -> void:
 	print("=== Party members: ===")

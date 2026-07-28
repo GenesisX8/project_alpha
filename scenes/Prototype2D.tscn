@@ -26,6 +26,8 @@ hero_db = ExtResource("5_2rryk")
 script = ExtResource("3_skeuc")
 card_db = ExtResource("7_5haav")
 
-[node name="GameController" type="Node" parent="." unique_id=11501402 node_paths=PackedStringArray("prototype2d")]
+[node name="GameController" type="Node" parent="." unique_id=11501402 node_paths=PackedStringArray("prototype2d", "party", "player_deck")]
 script = ExtResource("3_kov5e")
 prototype2d = NodePath("..")
+party = NodePath("../Player/Party")
+player_deck = NodePath("../Player/Deck")

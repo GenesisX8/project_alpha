@@ -1,7 +1,7 @@
 class_name PlayerDeck extends Node
 
 @export var card_db: CardDatabase
-var cards: Array[Card] = []
+var deck: Array[Card] = []
 var hand: Array[Card] = []
 var max_hand_size: int = 5
 
@@ -13,14 +13,15 @@ func _ready():
 # Add your cards to the deck
 func load_deck():
 	for card in card_db.cards:
-		cards.append(card.duplicate())
+		deck.append(card.duplicate())
 	deck_loaded.emit() # Signal when deck is loaded
-	print("Deck loaded successfully with ", cards.size(), " cards")
+	print("Deck loaded successfully with ", deck.size(), " cards")
+	return deck
 
 func draw_card() -> Card:
 	# TODO(design): empty-deck behaviour is an open question — reshuffle the
 	# discard pile back in, or fatigue/no-draw? See docs/design/rules.md.
-	if cards.is_empty():
+	if deck	.is_empty():
 		print("No cards in your deck!")
 		return null
 
@@ -32,18 +33,18 @@ func draw_card() -> Card:
 	# drawing off a pre-shuffled deck, so this does not pre-empt the shuffle
 	# design. TODO(design): randi() is unseeded — the build plan flags
 	# determinism/replayability as a decision to make early.
-	var index := randi() % cards.size()
-	var card: Card = cards[index]
-	cards.remove_at(index)
+	var index := randi() % deck.size()
+	var card: Card = deck[index]
+	deck.remove_at(index)
 	hand.append(card)
 	print("Drew: ", card.name)
 	return card
 
 func add_card(card: Card):
-	cards.append(card)
+	deck.append(card)
 
 func get_card_by_id(id: int) -> Card:
-	for card in cards:
+	for card in deck:
 		if card.id == id:
 			return card
 	return null
@@ -61,10 +62,10 @@ func get_hand() -> Array[Card]:
 
 func print_deck():
 	print("=== PLAYER DECK ===")
-	print("Total cards: ", cards.size())
+	print("Total cards: ", deck.size())
 
-	for i in range(cards.size()):
-		var card: Card = cards[i]
+	for i in range(deck.size()):
+		var card: Card = deck[i]
 		if !card:
 			print("[%d] NULL CARD" % i)
 		else:

@@ -5,8 +5,12 @@
 [resource]
 script = ExtResource("1_ibgmb")
 id = 3
+label = "Hero"
+level = 1
 name = "Vayne"
 description = "A skilled archer with a mysterious past."
 health = 85
 attack = 20
 defense = 10
+agility = 25
+skills = Array[String](["Attack", "Defend", "Rapid Fire"])

@@ -4,6 +4,7 @@ extends Node
 var enemies: Array[Enemy] = []
 var max_enemies: int = 3
 
+signal enemy_loaded(enemy: Enemy)
 signal enemies_loaded(enemies: Array[Enemy])
 signal enemies_ready()
 
@@ -15,8 +16,11 @@ func _process(_delta: float) -> void:
 	pass
 
 func load_enemies() -> Array[Enemy]:
-	print("Enemies loaded successfully with ", enemy_db.enemies.size(), " enemies")
-	return enemy_db.enemies.duplicate()
+	for enemy in enemy_db.enemies:
+		enemies.append(enemy.duplicate())
+	enemy_loaded.emit() # Signal that a enemy has been loaded
+	print("Enemies loaded successfully with ", enemies.size(), " enemies")
+	return enemies
 
 func print_enemies() -> void:
 	print("=== ENEMIES: ===")
