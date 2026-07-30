@@ -15,6 +15,15 @@ enemy_db = ExtResource("2_nu6ef")
 
 [node name="CombatCanvas" type="CanvasLayer" parent="." unique_id=1026193225]
 
+[node name="CombatTextBox" type="RichTextLabel" parent="CombatCanvas" unique_id=1948319680]
+offset_left = 152.0
+offset_top = 37.0
+offset_right = 329.0
+offset_bottom = 113.0
+bbcode_enabled = true
+fit_content = true
+metadata/_edit_use_anchors_ = true
+
 [node name="CombatMenu" type="VBoxContainer" parent="CombatCanvas" unique_id=1158280068]
 offset_left = 63.0
 offset_top = 213.0
@@ -110,7 +119,7 @@ hero_db = ExtResource("5_2rryk")
 script = ExtResource("3_skeuc")
 card_db = ExtResource("7_5haav")
 
-[node name="GameController" type="Node" parent="." unique_id=11501402 node_paths=PackedStringArray("player_deck", "party", "prototype2d", "combat_menu", "attack_button", "defend_button", "skill_button", "target_menu", "target1_button", "target2_button", "target3_button")]
+[node name="GameController" type="Node" parent="." unique_id=11501402 node_paths=PackedStringArray("player_deck", "party", "prototype2d", "combat_menu", "attack_button", "defend_button", "skill_button", "target_menu", "target1_button", "target2_button", "target3_button", "combat_text_box")]
 script = ExtResource("3_kov5e")
 player_deck = NodePath("../Player/Deck")
 party = NodePath("../Player/Party")
@@ -123,6 +132,7 @@ target_menu = NodePath("../CombatCanvas/TargetMenu")
 target1_button = NodePath("../CombatCanvas/TargetMenu/Target1Button")
 target2_button = NodePath("../CombatCanvas/TargetMenu/Target2Button")
 target3_button = NodePath("../CombatCanvas/TargetMenu/Target3Button")
+combat_text_box = NodePath("../CombatCanvas/CombatTextBox")
 
 [connection signal="pressed" from="CombatCanvas/CombatMenu/AttackButton" to="GameController" method="_on_attack_button_pressed"]
 [connection signal="pressed" from="CombatCanvas/CombatMenu/DefendButton" to="GameController" method="_on_defend_button_pressed"]

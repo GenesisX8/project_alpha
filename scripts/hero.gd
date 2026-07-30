@@ -12,6 +12,7 @@ class_name Hero extends Resource
 @export var agility: int
 @export var skills: Array[String]
 @export var isdead: bool = false
+var combat_text: String
 
 func check_death() -> bool:
 	if current_health <= 0:
@@ -22,15 +23,20 @@ func check_death() -> bool:
 func fattack(target: Enemy) -> int:
 	# Logic for hero's attack
 	var damage = attack
+	var combat_text1 = "%s attacks %s for %d damage " % [name, target.name, damage]
+	var combat_text2: String
 	target.current_health -= damage
 	print("%s attacks %s for %d damage" % [name, target.name, damage])
 
 	if target.check_death():
+		combat_text2 = "%s has been defeated!" % target.name
 		print("%s has been defeated!" % target.name)
 		target.current_health = 0
 	else:
+		combat_text2 = "%s is still standing!" % target.name
 		print("%s is still standing!" % target.name)
-	
+
+	combat_text = combat_text1 + combat_text2 + " %s has %d health remaining" % [target.name, target.current_health]
 	print("%s has %d health remaining" % [target.name, target.current_health])
 	return damage
 

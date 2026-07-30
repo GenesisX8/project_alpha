@@ -35,6 +35,9 @@ const ACTION_LABELS: Array[String] = ["Attack", "Defend", "Skill"]
 @export var target2_button: Button
 @export var target3_button: Button
 
+@export var combat_text_box: RichTextLabel
+@onready var combat_text: String
+
 var player_input: bool = false
 
 var _turn_state: TurnState = TurnState.ACTION_MENU
@@ -55,9 +58,12 @@ func _process(_delta: float) -> void:
 func start_combat() -> void:
 	## Initialize the combat state and Load assets
 	heroes = party.load_party() # Load player party assets
+	combat_text = "Party loaded successfully! " + heroes[0].name + ", " + heroes[1].name + ", " + heroes[2].name
+	combat_text_box.append_text(combat_text)
 	hero1 = heroes[0] if heroes.size() > 0 else null
 	hero2 = heroes[1] if heroes.size() > 1 else null
 	hero3 = heroes[2] if heroes.size() > 2 else null
+	print("CombatText: " + combat_text)
 
 	# Print party if debug_party is enabled
 	if debug_party:
@@ -68,6 +74,8 @@ func start_combat() -> void:
 	enemy1 = enemies[0] if enemies.size() > 0 else null
 	enemy2 = enemies[1] if enemies.size() > 1 else null
 	enemy3 = enemies[2] if enemies.size() > 2 else null
+	combat_text = "Enemies loaded successfully! " + enemy1.name + ", " + enemy2.name + ", " + enemy3.name
+	combat_text_box.append_text(combat_text)
 
 	target1_button.text = enemy1.name
 	target2_button.text = enemy2.name
@@ -159,14 +167,16 @@ func _get_valid_targets() -> Array[Enemy]:
 			targets.append(e)
 	return targets
 
+# _pending_action = ACTION_LABELS[_cursor_index]
 func _confirm_action() -> void:
-	_pending_action = ACTION_LABELS[_cursor_index]
 	match _pending_action:
 		"Attack", "Skill":
 			_turn_state = TurnState.TARGET_SELECT
 			target1_button.grab_focus()
 			_cursor_index = 0
 		"Defend":
+			combat_text = "%s defends!" % _current_hero.name
+			combat_text_box.text = combat_text
 			print("%s defends!" % _current_hero.name)
 			_end_player_turn()
 
@@ -179,6 +189,8 @@ func _confirm_target(target_index: int) -> void:
 		"Skill":
 			# TODO: no skill-effect system yet (see docs/design/build-plan.md#5); stub only.
 			print("%s attempts a skill on %s (not implemented yet)." % [_current_hero.name, target.name])
+	combat_text = _current_hero.combat_text
+	combat_text_box.text = combat_text
 	_end_player_turn()
 
 func _cancel_target_selection() -> void:
@@ -206,22 +218,37 @@ func _print_menu() -> void:
 
 
 func _on_attack_button_pressed() -> void:
-	print("%s chooses to attack!" % _current_hero.name)
-	_confirm_action()
+	if _turn_state == TurnState.ACTION_MENU:
+		combat_text = "%s chooses to attack!" % _current_hero.name
+		combat_text_box.text = combat_text
+		print("%s chooses to attack!" % _current_hero.name)
+		_pending_action = "Attack"
+		_confirm_action()
 
 func _on_defend_button_pressed() -> void:
-	print("%s chooses to defend!" % _current_hero.name)
-	_confirm_action()
+	if _turn_state == TurnState.ACTION_MENU:
+		combat_text = "%s chooses to defend!" % _current_hero.name
+		combat_text_box.text = combat_text
+		print("%s chooses to defend!" % _current_hero.name)
+		_pending_action = "Defend"
+		_confirm_action()
 
 func _on_skill_button_pressed() -> void:
-	print("%s chooses to use a skill!" % _current_hero.name)
-	_confirm_action()
+	if _turn_state == TurnState.ACTION_MENU:
+		combat_text = "%s chooses to use a skill!" % _current_hero.name
+		combat_text_box.text = combat_text
+		print("%s chooses to use a skill!" % _current_hero.name)
+		_pending_action = "Skill"
+		_confirm_action()
 
 func _on_target_1_button_pressed() -> void:
-	_confirm_target(0) # 0 refers to the first target in the list
+	if _turn_state == TurnState.TARGET_SELECT:
+		_confirm_target(0) # 0 refers to the first target in the list
 
 func _on_target_2_button_pressed() -> void:
-	_confirm_target(1) # 1 refers to the second target in the list
+	if _turn_state == TurnState.TARGET_SELECT:
+		_confirm_target(1) # 1 refers to the second target in the list
 
 func _on_target_3_button_pressed() -> void:
-	_confirm_target(2) # 2 refers to the third target in the list
+	if _turn_state == TurnState.TARGET_SELECT:
+		_confirm_target(2) # 2 refers to the third target in the list
